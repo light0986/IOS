@@ -110,7 +110,7 @@ class NewViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true);
         }
     
-    
+    //鍵盤位移
     
     @IBAction func onEnd(_ sender: Any) {
         view.endEditing(true);
@@ -118,17 +118,13 @@ class NewViewController: UIViewController, UITextFieldDelegate {
     
     private func registerObserver(){
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil);
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil);
-        
         origincenter = view.center;
     }
     
     @objc private func keyboardWillShow(_ sender: Notification){
         var firstResponder : UITextField!;
-        
         view.center = origincenter;
-        
         view.subviews.forEach{
             view in if view is UITextField{
                 if (view as! UITextField).isFirstResponder{
@@ -137,16 +133,10 @@ class NewViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        let rect = sender.userInfo![
-            UIResponder.keyboardFrameEndUserInfoKey
-        ] as! CGRect;
-        
+        let rect = sender.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect;
         let keyboardHeight = rect.height;
-        
         let distance = view.frame.height - firstResponder.frame.origin.y + firstResponder.frame.height;
-        
-        if distance < keyboardHeight + 65{
-            view.center = CGPoint(
+        if distance < keyboardHeight + 65{view.center = CGPoint(
                 x: view.center.x,
                 y: view.center.y - keyboardHeight
             );
